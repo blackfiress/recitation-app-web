@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>鑳屼功灏忚兘鎵?/title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333;min-height:100vh}
+.app{max-width:640px;margin:0 auto;padding:16px}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:8px 0}
+.hdr h1{font-size:22px;cursor:pointer;font-weight:700}
+.hdr a{color:#2563eb;cursor:pointer;font-size:14px;text-decoration:none;margin-left:12px}
+.tab{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:none;font-weight:500}
+.ta{background:#2563eb;color:#fff}.tb{background:#e5e7eb;color:#4b5563}
+.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.btn{display:inline-block;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;border:none;cursor:pointer;text-align:center}
+.bp{background:#2563eb;color:#fff}.bg{background:#16a34a;color:#fff}.by{background:#ca8a04;color:#fff}
+.bgr{background:#e5e7eb;color:#4b5563}.bs{padding:6px 12px;font-size:12px;border-radius:8px}
+.bw{width:100%}.flex{display:flex}.f1{flex:1}.g2{gap:8px}.g3{gap:12px}.ac{align-items:center}.jsb{justify-content:space-between}
+.fw{flex-wrap:wrap}.tc{text-align:center}.gr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.pb{height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.pf{height:100%;background:#22c55e;border-radius:99px;transition:width .3s}
+.bd{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
+.bg2{background:#dcfce7;color:#166534}.by2{background:#fef9c3;color:#854d0e}
+.rb{background:#eff6ff;border-radius:12px;padding:20px;min-height:80px;margin-bottom:24px}
+.sc{background:#fff;border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.f12{font-size:12px;color:#6b7280}.s14{font-size:14px}.s20{font-size:20px;font-weight:700}.s36{font-size:36px}.s60{font-size:60px;font-weight:700}
+.fw6{font-weight:600}.gn{color:#16a34a}.rd{color:#dc2626}.gy{color:#6b7280}.lg{color:#9ca3af}
+.cg{color:#16a34a}.ce{color:#dc2626;background:#fef2f2;border-radius:2px;padding:0 2px}
+.ed{background:#f9fafb;border-radius:6px;padding:8px;margin-top:6px;font-size:12px;color:#6b7280}
+.ld{padding:40px 0;text-align:center;color:#9ca3af;font-size:16px}
+.mb2{margin-bottom:8px}.mb3{margin-bottom:12px}.mb4{margin-bottom:16px}.mb6{margin-bottom:24px}.mb8{margin-bottom:32px}.mt8{margin-top:32px}.mt2{margin-top:8px}
+.inp{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;outline:none}
+.ta{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:10px;font-size:14px;min-height:120px;outline:none;font-family:inherit}
+@media(prefers-color-scheme:dark){body{background:#1a1a2e;color:#e0e0e0}.card{background:#16213e;border-color:#2a2a4a}.sc{background:#16213e}.rb{background:#1a1a3e}.bgr{background:#2a2a4a;color:#b0b0b0}.inp,.ta{background:#16213e;color:#e0e0e0;border-color:#2a2a4a}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+"use strict";
+const POEMS = [{"t":"静夜思","g":"一上","c":"床前明月光|疑是地上霜|举头望明月|低头思故乡"},{"t":"咏鹅","g":"一上","c":"鹅鹅鹅|曲项向天歌|白毛浮绿水|红掌拨清波"},{"t":"春晓","g":"一下","c":"春眠不觉晓|处处闻啼鸟|夜来风雨声|花落知多少"},{"t":"登鹳雀楼","g":"一下","c":"白日依山尽|黄河入海流|欲穷千里目|更上一层楼"},{"t":"悯农","g":"一下","c":"锄禾日当午|汗滴禾下土|谁知盘中餐|粒粒皆辛苦"},{"t":"望庐山瀑布","g":"二上","c":"日照香炉生紫烟|遥看瀑布挂前川|飞流直下三千尺|疑是银河落九天"},{"t":"赠汪伦","g":"二上","c":"李白乘舟将欲行|忽闻岸上踏歌声|桃花潭水深千尺|不及汪伦送我情"},{"t":"回乡偶书","g":"二上","c":"少小离家老大回|乡音无改鬓毛衰|儿童相见不相识|笑问客从何处来"},{"t":"草","g":"二下","c":"离离原上草|一岁一枯荣|野火烧不尽|春风吹又生"},{"t":"咏柳","g":"二下","c":"碧玉妆成一树高|万条垂下绿丝绦|不知细叶谁裁出|二月春风似剪刀"},{"t":"早发白帝城","g":"三上","c":"朝辞白帝彩云间|千里江陵一日还|两岸猿声啼不住|轻舟已过万重山"},{"t":"望天门山","g":"三上","c":"天门中断楚江开|碧水东流至此回|两岸青山相对出|孤帆一片日边来"},{"t":"绝句","g":"三下","c":"两个黄鹂鸣翠柳|一行白鹭上青天|窗含西岭千秋雪|门泊东吴万里船"},{"t":"元日","g":"三下","c":"爆竹声中一岁除|春风送暖入屠苏|千门万户曈曈日|总把新桃换旧符"},{"t":"题西林壁","g":"四上","c":"横看成岭侧成峰|远近高低各不同|不识庐山真面目|只缘身在此山中"},{"t":"暮江吟","g":"四上","c":"一道残阳铺水中|半江瑟瑟半江红|可怜九月初三夜|露似真珠月似弓"},{"t":"出塞","g":"四上","c":"秦时明月汉时关|万里长征人未还|但使龙城飞将在|不教胡马度阴山"},{"t":"四时田园杂兴","g":"四下","c":"昼出耘田夜绩麻|村庄儿女各当家|童孙未解供耕织|也傍桑阴学种瓜"},{"t":"示儿","g":"五上","c":"死去元知万事空|但悲不见九州同|王师北定中原日|家祭无忘告乃翁"},{"t":"己亥杂诗","g":"五上","c":"浩荡离愁白日斜|吟鞭东指即天涯|落红不是无情物|化作春泥更护花"},{"t":"竹石","g":"六下","c":"咬定青山不放松|立根原在破岩中|千磨万击还坚劲|任尔东西南北风"},{"t":"石灰吟","g":"六下","c":"千锤万凿出深山|烈火焚烧若等闲|粉骨碎身浑不怕|要留清白在人间"},{"t":"春夜喜雨","g":"六下","c":"好雨知时节|当春乃发生|随风潜入夜|润物细无声"}];
+const LS = k => JSON.parse(localStorage.getItem(k) || "null");
+const LSS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+let ATTEMPTS = LS("att") || [];
+let MISTAKES = LS("mis") || {};
+function saveData() { LSS("att", ATTEMPTS); LSS("mis", MISTAKES); }
+
+function cmp(e, a) {
+  const n = s => s.replace(/[^\w\u4e00-\u9fff]/g,"").toLowerCase();
+  const ex = n(e), ac = n(a);
+  const matched = [], errors = [];
+  let cor = 0;
+  for (let i = 0; i < ex.length; i++) {
+    const c = i < ac.length ? ac[i] : null;
+    if (c === ex[i]) { matched.push({i,e:ex[i],a:ex[i],ok:true}); cor++; }
+    else if (c !== null) { matched.push({i,e:ex[i],a:c,ok:false}); errors.push({p:i,e:ex[i],a:c,t:"m"}); }
+    else { matched.push({i,e:ex[i],a:"",ok:false}); errors.push({p:i,e:ex[i],a:"",t:"s"}); }
+  }
+  for (let i = ex.length; i < ac.length; i++) { matched.push({i,e:"",a:ac[i],ok:false}); errors.push({p:i,e:"",a:ac[i],t:"e"}); }
+  return {matched, errors, score: ex.length > 0 ? Math.round(cor/ex.length*100) : 100};
+}
+
+const S = {};
+function nav(p, s) { location.hash = "#" + p; if (s) Object.assign(S, s); }
+function cu() { return location.hash.slice(1) || "/"; }
+function sh(h) { document.getElementById("app").innerHTML = h; }
+function ld() { return "<div class=ld>加载中...</div>"; }
+
+function pH() {
+  const sj = S.sj||0, sq = S.sq||"";
+  const poems = POEMS.filter(p=>p.g===(sj===0?"一上":"二上"));
+  const getScore = t => { const a = ATTEMPTS.filter(x => x.ti === t.t); return a.length > 0 ? Math.round(a.reduce((s,x)=>s+x.sc,0)/a.length) : 0; };
+  let h = '<div class=hdr><h1 data-go="home">背书小能手</h1><nav><a data-go="ms">错题本</a></nav></div>';
+  h += '<div class="flex g2 mb4">' + [0,1].map(function(s) {
+    var cls = sj === s ? "ta" : "tb";
+    var label = s === 0 ? "语文" : "英语";
+    return '<button class="tab ' + cls + '" data-go="tab' + s + '">' + label + '</button>';
+  }).join("") + '</div>';
+  h += '<div class="gr">';
+  for (const t of poems) {
+    const sc = getScore(t);
+    h += '<div class="card tc"><div class="s14 fw6 mb2">' + t.t + '</div><div class="f12 gy mb3">' + t.g + '</div>';
+    if (sc) h += '<div class="pb mb2"><div class="pf" style="width:' + sc + '%"></div></div><div class="f12" style="color:' + (sc>=90?"#16a34a":sc>=70?"#ca8a04":"#dc2626") + '">' + sc + '%</div>';
+    var title = t.t.replace(/'/g, "&apos;");
+    var grade = t.g.replace(/'/g, "&apos;");
+    var content = t.c.replace(/'/g, "&apos;");
+    h += '<div class="flex g2 mt2"><button class="btn bp bs f1" data-go="start" data-title="' + title + '" data-grade="' + grade + '" data-content="' + content + '">开始背诵</button></div></div>';
+  }
+  h += "</div>";
+  return h;
+}
+function pR() {
+  const t = S.rt; if (!t) { nav("/"); return ld(); }
+  const sn = t.c.split("|").filter(s => s.trim()), ci = S.ci || 0, rg = S.rg || "", rs = S.rs || [];
+  let h = "<div class=hdr><span style='cursor:pointer;color:#2563eb;font-size:14px' data-go='home'>\u2190 \u8fd4\u56de</span><span class='s14 fw6'>" + t.t + "</span></div>";
+  h += "<div class=sc><div class='f12 mb2'>\u7b2c" + (ci+1) + " / " + sn.length + " \u53e5</div><div style='color:#4b5563;font-size:15px'>" + sn[ci].replace(/</g,"&lt;") + "</div></div>";
+  h += "<div class=rb><div class='f12 mb2' style='color:#60a5fa'>\u4f60\u80cc\u7684\uff1a</div><div style='color:" + (rg?"#334155":"#93c5fd") + ";min-height:24px'>" + (rg || "\u7b49\u5f85\u4f60\u8bf4...") + "</div></div>";
+  const pct = (rs.length + (rg?1:0)) / sn.length * 100;
+  h += "<div class='flex ac g3 mb6'><div class='f1 pb'><div class=pf style='width:" + pct + "%'></div></div><span class=f12>" + (rs.length+(rg?1:0)) + "/" + sn.length + "</span></div>";
+  h += "<div class='flex g3'>";
+  if (S.il) h += "<button class='btn by f1' data-go='stR'>\u23f8 \u6682\u505c</button>";
+  else h += "<button class='btn bg f1' data-go='stR'>\ud83c\udfa4 \u5f00\u59cb</button>";
+  if (rg) h += "<button class='btn bp' data-go='nxR'>\u4e0b\u4e00\u53e5 \u2192</button>";
+  if (rg) h += "<button class='btn bgr' data-go='fnR'>\u5b8c\u6210</button>";
+  h += "</div>";
+  if (ci > 0) {
+    const prevIdx = ci - 1, prev = S.rs?S.rs[prevIdx]:null;
+    if (prev) {
+      h += "<div class=card><div class='f12 gy mb2'>\u4e0a\u4e00\u53e5</div><div class='flex fw' style='gap:2px'>";
+      for (const q of prev.matched) h += "<span class='" + (q.ok?"cg":"ce") + "'>" + (q.e||q.a) + "</span>";
+      h += "</div></div>";
+    }
+  }
+  return h;
+}
+
+function stR() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert("\u8bf7\u4f7f\u7528 Chrome \u6216 Edge"); return; }
+  if (S.il) { try { S.rn?.stop(); } catch(e) {} S.il = false; sh(pR()); return; }
+  const r = new SR();
+  r.lang = "zh-CN";
+  r.continuous = true; r.interimResults = true;
+  r.onresult = function(e) { let f = ""; for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) f += e.results[i][0].transcript; if (f) { S.rg = (S.rg || "") + f; sh(pR()); } };
+  r.onend = function() { S.il = false; sh(pR()); };
+  r.start(); S.rn = r; S.il = true; sh(pR());
+}
+
+function nxR() {
+  const sn = (S.rt?S.rt.c:"").split("|").filter(s => s.trim());
+  const ci = S.ci || 0;
+  const rg = S.rg || "";
+  const cmpR = cmp(sn[ci]||"", rg);
+  S.rs = S.rs || [];
+  S.rs[ci] = cmpR;
+  S.rg = "";
+  if (ci < sn.length - 1) { S.ci = ci + 1; sh(pR()); }
+  else fnR();
+}
+
+function fnR() {
+  try { S.rn?.stop(); } catch(e) {}
+  S.il = false;
+  const sn = (S.rt?S.rt.c:"").split("|").filter(s => s.trim());
+  const sp = (S.rs||[]).map(r => (r||{}).spoken||"");
+  if ((S.rs||[]).length === (S.ci||0)) sp[S.ci||0] = S.rg||"";
+  let total = 0, correct = 0;
+  const results = sn.map((sen, i) => {
+    const r = cmp(sen, sp[i]||"");
+    total += sen.replace(/[^\u4e00-\u9fff]/g,"").length;
+    correct += r.matched.filter(m=>m.ok).length;
+    for (const e of r.errors) { const key = e.e; MISTAKES[key] = (MISTAKES[key]||0) + 1; }
+    return r;
+  });
+  const score = total > 0 ? Math.round(correct/total*100) : 100;
+  const att = { ti:S.rt.t, sc:score, ts:Date.now(), results };
+  ATTEMPTS.push(att);
+  saveData();
+  nav("/res", { lr: att });
+}
+
+function pRes() {
+  const lr = S.lr;
+  if (!lr) return nav("/");
+  let h = "<div class=hdr><span style='cursor:pointer;color:#2563eb;font-size:14px' data-go='home'>\u2190 \u8fd4\u56de</span><span class='s14 fw6'>\u80cc\u8bf5\u7ed3\u679c</span></div>";
+  const sc = lr.sc, co = sc>=90?"#16a34a":sc>=70?"#ca8a04":"#dc2626";
+  const msg = sc>=90?"\u592a\u68d2\u4e86\uff01\u7ee7\u7eed\u52a0\u6cb9":sc>=70?"\u4e0d\u9519\uff0c\u8fd8\u6709\u8fdb\u6b65\u7a7a\u95f4":"\u518d\u80cc\u4e00\u6b21\u5427";
+  h += "<div class='tc mb8'><div style='font-size:60px;font-weight:700;color:" + co + "'>" + sc + "%</div><div class=f12>" + msg + "</div></div>";
+  if (lr.results) for (let i=0;i<lr.results.length;i++) {
+    const r = lr.results[i];
+    h += "<div class=card><div class='flex jsb ac mb2'><span class=f12>\u7b2c" + (i+1) + " \u53e5</span><span class='bd " + (r.score===100?"bg2":"by2") + "'>" + r.score + "%</span></div><div class='flex fw' style='gap:2px'>";
+    for (const q of r.matched) h += "<span class='" + (q.ok?"cg":"ce") + "'>" + (q.e||q.a) + "</span>";
+    h += "</div>";
+    if (r.errors.length>0) { h += "<div class=ed>"; for (const e of r.errors) h += "<div>\u539f\u6587\uff1a<span class=gn>" + e.e + "</span> \u2192 \u4f60\u80cc\u7684\uff1a<span class=rd>" + (e.a||"(\u6f0f\u4e86)") + "</span></div>"; h += "</div>"; }
+    h += "</div>";
+  }
+  h += "<div class='flex g3 mt8'><button class='btn bp f1' data-go='retry'>\u518d\u80cc\u4e00\u6b21</button><button class='btn bgr f1' data-go='home'>\u8fd4\u56de\u9996\u9875</button><button class='btn bgr' data-go='ms'>\u9519\u9898\u672c</button></div>";
+  return h;
+}
+
+function pMs() {
+  const keys = Object.keys(MISTAKES).sort((a,b)=>MISTAKES[b]-MISTAKES[a]);
+  let h = "<div class=hdr><h1>\u9519\u9898\u5206\u6790</h1><a data-go='home'>\u2190 \u8fd4\u56de</a></div>";
+  h += "<div class='gr mb6'><div class='card tc'><div class='s20 fw6' style=color:#2563eb>" + ATTEMPTS.length + "</div><div class=f12>\u603b\u80cc\u8bf5\u6b21\u6570</div></div><div class='card tc'><div class='s20 fw6 gn'>" + (ATTEMPTS.length?Math.round(ATTEMPTS.reduce((s,a)=>s+a.sc,0)/ATTEMPTS.length)+"%":"0%") + "</div><div class=f12>\u5e73\u5747\u5206</div></div><div class='card tc'><div class='s20 fw6 rd'>" + keys.length + "</div><div class=f12>\u6613\u9519\u5b57\u79cd\u6570</div></div></div>";
+  if (keys.length > 0) {
+    h += "<div class=mb6><div class='f12 fw6 gy mb3'>\u9ad8\u9891\u9519\u5b57\u6392\u884c\u699c</div>";
+    for (let i=0;i<Math.min(keys.length,10);i++) {
+      const k = keys[i];
+      h += "<div class='card flex ac g3' style='padding:10px 14px'><span class=f12 style=width:16px>" + (i+1) + "</span><span class=rd style='font-size:18px;font-family:monospace'>" + k + "</span><div class=f1><div class='f12 lg'>\u9519\u4e86 " + MISTAKES[k] + " \u6b21</div></div></div>";
+    }
+    h += "</div>";
+  }
+  const textScores = {};
+  for (const a of ATTEMPTS) { if (!textScores[a.ti]) textScores[a.ti] = []; textScores[a.ti].push(a.sc); }
+  const weak = Object.entries(textScores).sort((a,b) => (a[1].reduce((s,x)=>s+x,0)/a[1].length) - (b[1].reduce((s,x)=>s+x,0)/b[1].length)).slice(0,5);
+  if (weak.length > 0) {
+    h += "<div class=mb6><div class='f12 fw6 gy mb3'>\u9700\u8981\u52a0\u5f3a\u7684\u8bfe\u6587</div>";
+    for (const [ti,scs] of weak) {
+      const avg = Math.round(scs.reduce((s,x)=>s+x,0)/scs.length);
+      const co = avg>=90?"#16a34a":avg>=70?"#ca8a04":"#dc2626";
+      h += "<div class='card flex jsb ac' style='padding:10px 14px'><div><div class=s14>" + ti + "</div><div class=f12>\u80cc\u8bf5 " + scs.length + " \u6b21</div></div><div class='flex ac g3'><span class='s14 fw6' style='color:" + co + "'>" + avg + "%</span></div></div>";
+    }
+    h += "</div>";
+  }
+  h += "<button class='btn bs bw' style='color:#dc2626;border:1px solid #fecaca;background:#fff;margin-top:12px' data-go='clear'>\u6e05\u7a7a\u6240\u6709\u6570\u636e</button>";
+  return h;
+}
+
+function rt() {
+  const p = cu();
+  if (p === "/" || p === "") sh(pH());
+  else if (p === "/r") sh(pR());
+  else if (p === "/res") sh(pRes());
+  else if (p === "/ms") sh(pMs());
+  else sh(pH());
+}
+window.addEventListener("hashchange", rt);
+window.addEventListener("load", () => {
+  if (!location.hash) location.hash = "#/";
+  rt();
+  document.getElementById("app").addEventListener("click", function(e) {
+    const el = e.target.closest("[data-go]");
+    if (!el) return;
+    const g = el.dataset.go;
+    switch (g) {
+      case "home": nav("/"); break;
+      case "ms": nav("/ms"); break;
+      case "tab0": S.sj = 0; sh(pH()); break;
+      case "tab1": S.sj = 1; sh(pH()); break;
+      case "start":
+        S.rt = {t: el.dataset.title, g: el.dataset.grade, c: el.dataset.content};
+        S.ci = 0; S.rg = ""; S.rs = []; S.il = false;
+        if (S.rn) try { S.rn.stop(); } catch(e) {}
+        nav("/r");
+        break;
+      case "stR": stR(); break;
+      case "nxR": nxR(); break;
+      case "fnR": fnR(); break;
+      case "retry":
+        S.rt = S.lr ? {t:S.rt.t, g:S.rt.g, c:S.rt.c} : null;
+        nav("/r");
+        break;
+      case "clear":
+        if (confirm("确定清空所有数据？")) { ATTEMPTS=[]; MISTAKES={}; saveData(); sh(pMs()); }
+        break;
+    }
+  });
+});
+</script>
+</body>
+</html>
+
